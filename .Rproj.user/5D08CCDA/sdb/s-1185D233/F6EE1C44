@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "classifications <- list(Six_Nations = c(\"England\", \"Wales\", \"Scotland\", \"Ireland\", \"France\", \"Italy\"),\n                        Tri_Nations = c(\"New Zealand\", \"Australia\", \"South Africa\")\n                        )",
+    "created" : 1499519646872.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3532140993",
+    "id" : "F6EE1C44",
+    "lastKnownWriteTime" : 1499519831,
+    "last_content_update" : 1499519831644,
+    "path" : "~/Documents/Rugby_ELO/classification_lists.R",
+    "project_path" : "classification_lists.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

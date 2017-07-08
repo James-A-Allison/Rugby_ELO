@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(openxlsx)\nlibrary(dplyr)\nlibrary(tidyr)\n\nsix_nations <- readWorkbook(\"Rugby_results_archive.xlsx\", cols = 1:2)\n# six_nations <- rename(six_nations, Date = ate)\n\ntest_character <- six_nations[1,2]\ntest_character <- gsub(\"[A-Z]\", \"\", test_character)\ntest_character <- gsub(\"[a-z]\", \"\", test_character)\ntest_character <- gsub(\"23 - 21\", \"\", test_character)\ntest_character <- substr(test_character, 1, 1)\n\nsix_nations$Match <- gsub(test_character, \" \", six_nations$Match)\n\nsix_nations <- separate(six_nations, Date, c(\"Month\", \"Day\", \"Year\"), \" \")\nsix_nations <- separate(six_nations, Match, c(\"Home.Team\", \"Home.Score\", \"v\", \"Away.Score\", \"Away.Team\"), \" \")\nsix_nations <- subset(six_nations, select = -v)\nsix_nations$Day <- gsub(\",\",\"\",six_nations$Day)\nsix_nations$Home.Score <- as.numeric(six_nations$Home.Score)\nsix_nations$Away.Score <- as.numeric(six_nations$Away.Score)\n\nsix_nations$Date <- as.Date(paste0(six_nations$Day, six_nations$Month, six_nations$Year), \"%d%b%Y\")\nsix_nations <- six_nations[order(six_nations$Date),]\n\nhome_advantage <- mean(six_nations$Home.Score - six_nations$Away.Score)\n\nsix_nations <- subset(six_nations, select = -c(Month, Day, Year))\n# test <- gather(six_nations, key = Team, value = Venue, c(Home.Team, Away.Team))\n\n\n\n\n# ELO table setup ---------------------------------------------------------\n\ninital_date <-  as.Date(paste0(\"1\", \"Jan\", \"1980\"), \"%d%b%Y\")\nteams <- unique(six_nations$Home.Team)\ninital_ELO <- 1500\n\n\n# elo_table <- data.frame(Match.Day=date(),\n#                         Team=character(),\n#                         ELO=numeric())\nelo_table <- cbind(inital_date, teams, inital_ELO)\nelo_table <- data.frame(elo_table, stringsAsFactors = F)\nelo_table$inital_date <- inital_date\nelo_table$inital_ELO <- as.numeric(elo_table$inital_ELO)\nelo_table <- rename(elo_table, Date=inital_date)\nelo_table <- rename(elo_table, Team=teams)\nelo_table <- rename(elo_table, ELO=inital_ELO)\n\nelo_table[elo_table$Team == \"Italy\",3] <- 700\n\n\n# ELO function ------------------------------------------------------------\n\nk <- 20\n\nfor (i in 1:length(six_nations[,1])) {\n\ncurrent_match <- six_nations[i,]\n\nelo_home <- elo_table[elo_table$Team == current_match$Home.Team,3]\nelo_away <- elo_table[elo_table$Team == current_match$Away.Team,3]\n\nelo_home <- elo_home[length(elo_home)]\nelo_away <- elo_away[length(elo_away)]\n\nexpected_score_home <- 1/(1+10^((elo_away-elo_home)/400))\nexpected_score_away <- 1/(1+10^((elo_home-elo_away)/400))\n\nexpected_score_home <- expected_score_home*2 - home_advantage\nexpected_score_away <- expected_score_away*2 + home_advantage\n\nactual_net_home_score <- current_match$Home.Score - current_match$Away.Score\nactual_net_away_score <- current_match$Away.Score - current_match$Home.Score\n\nnew_elo_home <- elo_home + k*(actual_net_home_score-expected_score_home)\nnew_elo_away <- elo_away + k*(actual_net_away_score-expected_score_away)\n\nnew_elo_row <- data.frame(Date=as.Date(current_match$Date), \n                          Team=as.character(current_match$Home.Team), \n                          ELO=as.numeric(new_elo_home))\n\nelo_table <- rbind(elo_table, new_elo_row)\n\nnew_elo_row <- data.frame(Date=as.Date(current_match$Date), \n                          Team=as.character(current_match$Away.Team), \n                          ELO=as.numeric(new_elo_away))\n\nelo_table <- rbind(elo_table, new_elo_row)\n}",
+    "created" : 1499100637259.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "809736809",
+    "id" : "562F048B",
+    "lastKnownWriteTime" : 1499100514,
+    "last_content_update" : 1499100514,
+    "path" : "~/Documents/Rugby_ELO/6N script.R",
+    "project_path" : "6N script.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
