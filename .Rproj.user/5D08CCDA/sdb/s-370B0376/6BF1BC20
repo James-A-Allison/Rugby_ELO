@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "current_ratings <- function() {\n  output_ratings <- c()\n  teams <- unique(elo_table$Team)\n  for (i in 1:length(teams)) {\n    team <- teams[i]\n    elo <- elo_table[elo_table$Team == team,3]\n    elo <- elo[length(elo)]\n    row <- data.frame(Team = as.character(team), \n                      Elo = as.numeric(elo))\n    output_ratings <- rbind(output_ratings, row)\n  }\n  output_ratings <-  output_ratings[order(output_ratings$Elo, decreasing = TRUE),]\n  row.names(output_ratings) <- NULL \n  return(output_ratings)\n}\n\naverage_elo_out <- c()\nunique_match_dates <- unique(elo_table$Date)\nfor (i in 1:length(unique_match_dates)) {\n  date <- unique_match_dates[i]\n  small_table <- elo_table[elo_table$Date <= date,]\n  teams <- unique(small_table$Team)\n  output_ratings <- c()\n  for (j in 1:length(teams)) {\n    team <- teams[j]\n    elo <- small_table[small_table$Team == team,3]\n    elo <- elo[length(elo)]\n    row <- data.frame(Team = as.character(team), \n                      Elo = as.numeric(elo))\n    output_ratings <- rbind(output_ratings, row)\n  }\n  ave_elo <- mean(output_ratings$Elo)\n  row <- data.frame(Date = as.Date(date),\n                    Average.Elo = as.numeric(ave_elo))\n  average_elo_out <- rbind(average_elo_out, row)\n}",
+    "created" : 1499534718309.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4130490403",
+    "id" : "6BF1BC20",
+    "lastKnownWriteTime" : 1499595408,
+    "last_content_update" : 1499595408633,
+    "path" : "~/Documents/Rugby_ELO/functions.R",
+    "project_path" : "functions.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
