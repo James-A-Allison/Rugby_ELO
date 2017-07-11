@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# Qualifing ---------------------------------------------------------------\n\n\n# Africa ------------------------------------------------------------------\n\n\nAfrica_Gold_cup_2017 <- sim_tournament(readWorkbook(\"Fixtures.xlsx\", \"Africa_Gold_Cup_2017\")) # loser relageted, Morocco enters\nAfrica_Gold_cup_2018 <- sim_tournament(fixtures = generate_fixtures(teams = c(as.character(Africa_Gold_cup_2017$Team[1:5]), \"Morocco\"), times_vs_opp = 1)) # winner becomes Africa_1, runner_up goes to Africa_reperchae\nAfrica_1 <- Africa_Gold_cup_2018$Team[1]\nAfrica_runner_up <- Africa_Gold_cup_2018[Africa_Gold_cup_2018 != \"Morocco\"][2]\nAfrica_repechage <- sim_game(teams = c(Africa_runner_up, \"Morocco\")) # winner enters repechage\n\n\n# Repechage ---------------------------------------------------------------\n\n\n# World Cup ---------------------------------------------------------------\n\n\n\nPool_A <- c(\"Ireland\", \"Scotland\", \"Japan\", Europe_1, Playoff_winner)\nPool_B <- c(\"New Zealand\", \"South Africa\", \"Italy\", Africa_1, Repecharge)\nPool_C <- c(\"England\", \"France\", \"Argentina\", \"United States of America\", Oceana_2)\nPool_D <- c(\"Australia\", \"Wales\", \"Georgia\", \"Fiji\", Americas_2)\n\nQF1 <- c(Pool_A_winner, Pool_B_runner_up)\nQF2 <- c(Pool_D_winner, Pool_C_runner_up)\nQF3 <- c(Pool_B_winner, Pool_A_runner_up)\nQF4 <- c(Pool_C_winner, Pool_D_runner_up)\n\nSF1 <- c(QF1_winner, QF2_winner)\nSF2 <- c(QF3_winner, QF4_winner)\n\nbronze <- c(SF1_loser, SF2_loser)\nWCF <- c(SF1_winner, SF2_winner)\n",
+    "created" : 1499674081543.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "450832905",
+    "id" : "75EA37BC",
+    "lastKnownWriteTime" : 1499706205,
+    "last_content_update" : 1499706918861,
+    "path" : "~/Documents/Rugby_ELO/world_cup.R",
+    "project_path" : "world_cup.R",
+    "properties" : {
+        "source_window_id" : "",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -93,28 +93,28 @@ tests_out <- select(tests_out, c(Team_A, Team_B, A_points, B_points, Diff, Groun
 
 # ELO table setup ---------------------------------------------------------
 
-inital_date <-  as.Date(paste0("1", "Jan", "1900"), "%d%b%Y")
-inital_ELO <- 1500
-modern_teams <- c("England", "Wales")
 
-elo_table <- cbind(inital_date, modern_teams, inital_ELO)
-elo_table <- data.frame(elo_table, stringsAsFactors = F)
-elo_table$inital_date <- inital_date
-elo_table$inital_ELO <- as.numeric(elo_table$inital_ELO)
-elo_table <- rename(elo_table, Date=inital_date)
-elo_table <- rename(elo_table, Team=modern_teams)
-elo_table <- rename(elo_table, ELO=inital_ELO)
-elo_table$Expected_win <- ""
-elo_table$Result <- ""
-elo_table$Opposition <- ""
 # elo_table$Competition <- ""
 
 # ELO function ------------------------------------------------------------
 
 k <- 20
 
-# run_elo <- function() {
-
+run_elo <- function(k = 20) {
+  inital_date <-  as.Date(paste0("1", "Jan", "1900"), "%d%b%Y")
+  inital_ELO <- 1500
+  modern_teams <- c("England", "Wales")
+  
+  elo_table <- cbind(inital_date, modern_teams, inital_ELO)
+  elo_table <- data.frame(elo_table, stringsAsFactors = F)
+  elo_table$inital_date <- inital_date
+  elo_table$inital_ELO <- as.numeric(elo_table$inital_ELO)
+  elo_table <- rename(elo_table, Date=inital_date)
+  elo_table <- rename(elo_table, Team=modern_teams)
+  elo_table <- rename(elo_table, ELO=inital_ELO)
+  elo_table$Expected_win <- ""
+  elo_table$Result <- ""
+  elo_table$Opposition <- ""
 
 for (i in 1:length(tests_out[,1])) {
   
@@ -124,7 +124,6 @@ for (i in 1:length(tests_out[,1])) {
     elo_home <- elo_table[elo_table$Team == current_match$Team_A,3]
     elo_home <- elo_home[length(elo_home)]
   } else {
-    # elo_home <- new_country()
     elo_home <- 1500
   }
   
@@ -132,7 +131,6 @@ for (i in 1:length(tests_out[,1])) {
     elo_away <- elo_table[elo_table$Team == current_match$Team_B,3]
     elo_away <- elo_away[length(elo_away)]
   } else {
-    # elo_away <- new_country()
     elo_away <- 1500
   }
   
@@ -140,9 +138,6 @@ for (i in 1:length(tests_out[,1])) {
   away_q <- 1/(1+10^(elo_away/400))
   
   total_q <- home_q + away_q
-  
-  # expected_score_home <- home_q/total_q
-  # expected_score_away <- away_q/total_q
   
   expected_score_home <- 1/(1+10^((elo_away-elo_home)/400))
   expected_score_away <- 1/(1+10^((elo_home-elo_away)/400))
@@ -172,9 +167,6 @@ for (i in 1:length(tests_out[,1])) {
   new_elo_home <- elo_home + k*(actual_net_home_score-expected_score_home)*margin_of_victory
   new_elo_away <- elo_away + k*(actual_net_away_score-expected_score_away)*margin_of_victory
   
-  # new_elo_home <- elo_home + k*(actual_net_home_score-expected_score_home)
-  # new_elo_away <- elo_away + k*(actual_net_away_score-expected_score_away)
-  
   new_elo_row <- data.frame(Date=as.Date(current_match$Match.Date), 
                             Team=as.character(current_match$Team_A), 
                             ELO=as.numeric(new_elo_home),
@@ -193,23 +185,5 @@ for (i in 1:length(tests_out[,1])) {
   
   elo_table <- rbind(elo_table, new_elo_row)
 }
-# }
+}
 
-plot_table <- elo_table
-plot_table$Team <- as.factor(plot_table$Team)
-
-# qplot(Date, ELO, data = plot_table, color = Team, geom = "line")
-
-qplot(Date, ELO, data = plot_table[plot_table$Team == "Georgia" | plot_table$Team == "Italy",], color = Team, geom = "step")
-
-new_six_nations <- plot_table[((plot_table$Team == "New Zealand" | plot_table$Team == "Wales" |
-                                  plot_table$Team == "Ireland" | plot_table$Team == "France" |
-                                  plot_table$Team == "Scotland" | plot_table$Team == "Italy") &
-                                 plot_table$Date > "1980-01-01"),]
-
-qplot(Date, ELO, data = new_six_nations, color = Team, geom = "step")
-
-new_six_nations <- plot_table[(plot_table$Team %in% classifications$Six_Nations | plot_table$Team %in% classifications$Tri_Nations) &
-                                 plot_table$Date > "2000-01-01",]
-
-qplot(Date, ELO, data = new_six_nations, color = Team, geom = "step")
