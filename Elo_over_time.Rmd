@@ -1,0 +1,29 @@
+---
+title: "Rugby Union Elo Ratings"
+author: "James Allison"
+date: "15/07/2017"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+elo_table <- read.csv("elo_table.csv", stringsAsFactors = F)
+elo_table$Date <- as.Date(elo_table$Date)
+```
+
+```{r elo, echo=FALSE}
+library(ggplot2)
+inputPanel(
+  selectInput("team", label = "Select team:",
+              choices = unique(elo_table$Team), selected = "New Zealand")
+)
+
+renderPlot({
+  plot_ob <- ggplot(data = elo_table[elo_table$Team == input$team,], mapping = aes(x = Date, y = ELO))
+  plot_ob <- plot_ob + geom_step()
+  plot_ob
+})
+```
+
+

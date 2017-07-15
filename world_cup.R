@@ -132,3 +132,4 @@ plot_ob <-
 # plot_ob <- plot_ob + scale_fill_manual(values = c("Sky Blue", "Gold", "Black", "Dark Green"))
 plot_ob
 
+write.csv(sim_grouped, "sim_grouped.csv", row.names = F)
