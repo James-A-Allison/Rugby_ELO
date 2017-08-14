@@ -134,7 +134,7 @@ generate_fixtures <- function(teams = NA, times_vs_opp = NA) {
   else {print("Not ready yet")}
 }
 
-sim_tournament <- function(fixtures = NA){
+sim_tournament <- function(fixtures = NA, elo_table_input = elo_table){
   teams <- unique(c(fixtures$Team_A, fixtures$Team_B))
   league_table <- data.frame(Team = as.character(teams),
                              Points = as.numeric(rep(0,length(teams))))
@@ -144,8 +144,8 @@ sim_tournament <- function(fixtures = NA){
     team_A <- match$Team_A
     team_B <- match$Team_B
     
-    elo_team_A <- current_ratings(teams_in = team_A)[,2]
-    elo_team_B <- current_ratings(teams_in = team_B)[,2]
+    elo_team_A <- current_ratings(teams_in = team_A, elo_table_input = elo_table)[,2]
+    elo_team_B <- current_ratings(teams_in = team_B, elo_table_input = elo_table)[,2]
     
     expected_score_home <- 1/(1+10^((elo_team_B-elo_team_A)/400))
     expected_score_away <- 1/(1+10^((elo_team_A-elo_team_B)/400))

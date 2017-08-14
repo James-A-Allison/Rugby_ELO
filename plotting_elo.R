@@ -1,5 +1,5 @@
 library(ggplot2)
-plot_table <- elo_table
-plot_table$Team <- as.factor(plot_table$Team)
 
-qplot(Date, ELO, data = plot_table, color = Team)
+plot <- ggplot(data = elo_table[elo_table$Team == "Italy" | elo_table$Team == "Six Nations",], aes(x = Date, y = ELO, color = Team))
+plot <- plot + geom_step(show.legend = T)
+plot
