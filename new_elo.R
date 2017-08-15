@@ -115,7 +115,7 @@ tests_out <- select(tests_out, c(Team_A, Team_B, A_points, B_points, Diff, Groun
 k <- 20
 
 # run_elo <- function(k = 20) {
-  inital_date <-  as.Date(paste0("1", "Jan", "1900"), "%d%b%Y")
+  inital_date <-  as.Date(paste0("31", "Jan", "1890"), "%d%b%Y")
   inital_Elo <- 1500
   modern_teams <- c("England", "Wales")
   

@@ -124,6 +124,7 @@ optimise_elo <- function(k = 20) {
 }
 
 generate_fixtures <- function(teams = NA, times_vs_opp = NA) {
+  require(tidyr)
   matches <- data.frame(combn(teams, 2))
   matches$Slot <- c("Team_A","Team_B")
   suppressWarnings(matches <- gather(matches, key = Slot))
